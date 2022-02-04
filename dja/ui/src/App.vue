@@ -1,6 +1,7 @@
 <template>
   <div id="app">
     <div id="nav">
+      <navbar />
       <router-link to="/">Home</router-link> |
       <router-link to="/about">About</router-link>
     </div>
@@ -10,18 +11,30 @@
 
 <script>
 
-// import axios from 'axios'
+import axios from 'axios'
+import Navbar from './components/Navbar.vue'
+
   export default {
     name: 'App',
 
-    components: {
+    beforeCreate() {
+      this.$store.commit('initStore')
+      const access_token = this.$store.state.access
 
+      if (access_token) {
+        axios.defaults.headers.common['Authorization'] = 'Bearer ' + access_token        
+      } else {
+        axios.defaults.headers.common['Authorization'] = ''
+      }
     },
+
+    components: {
+      Navbar,
+    },
+  
     data() {
       return {}
     }
-
-    
     
   }
 </script>
